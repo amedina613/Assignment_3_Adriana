@@ -1,0 +1,106 @@
+---
+title: "Assignment_3_Adriana"
+author: "Adriana"
+date: "2024-02-10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r eval=FALSE, include=FALSE}
+install.packages(c("usethis", "readr"))
+install.packages("tidyverse")
+```
+
+#Load packages and import majors list from Github
+```{r}
+library(usethis)
+library(tidyverse)
+library(readr)
+```
+
+```{r}
+url <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv"
+
+majors_list <- read.csv(url)
+```
+
+##1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+```{r}
+filtered_majors <- subset(majors_list, grepl("DATA|STATISTICS", Major))
+```
+
+#2 Write code that transforms the data below:
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+[13] "olive"        "salal berry"
+
+into 
+
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+```{r}
+vector <- c("bell pepper", "billberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+print(vector)
+```
+# Return :c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+```{r}
+string_with_quotes <- paste0('"', paste(vector, collapse = '","'), '"')
+print(string_with_quotes)
+```
+
+```{r does this work?}
+dput(vector)
+```
+
+#3 REGEX Describe, in words, what these expressions will match:
+(.)\1\1 
+
+(a) This will match any string that contains three identical characters in a row.
+
+"(.)(.)\\2\\1"
+
+(b) This will match any string that consists of a quotation mark followed by two characters and the literal string \2\1, and a closing quotation mark. The literal string includes \2\1 because there is an escape backslash present. 
+
+(..)\1
+
+(c) I think this will match a string where the first two characters are the same followed by another 2 adjacent repeat characters. The backslash is referring to group 1. 
+
+
+"(.).\\1.\\1"
+
+(d) This will match any string that consists of a quotation mark followed by any two characters, followed by the literal string \1 and any character, then another literal \1 and ends with a closing quotation mark. 
+
+ "(.)(.)(.).*\\3\\2\\1"
+ 
+(e) This will match any string starting with a quotation mark and consisting of 3(any) or more characters and then the literal string \3\2\1 followed by a closing quotation mark.
+
+#4 Construct regular expressions to match words that:
+
+(a) Start and end with the same character.:
+^(.)\.*\1$
+
++ ^ and $: Asserts the start and the end of the string, respectively.
++ (.): Captures any single character (the parenthesis make it a group.)
++ .*: Matches zero or more word characters (letters, digits, or underscores).Could also be a \w instead
++ \1: Back reference to the first capturing group.
+
+(b) Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.):
+(.)(.).*\1\2
+
++ (.)(.): captures any two adjacent characters. Note for self: It's not (..) because the letters don't have to be the same
++ .*: any characters in between
++ \1\2: back references to the first two capturing groups, ensuring that what will be returned is any string that repeats a pair of adjacent characters and any characters in between.
+
+(c) Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.):
+(.).*\1.*\1
+
++ (.): captures any single character, could also be \w for a single word char.
++ .*: represents anything in between
++ \1: references back to the first group(any single character) and it's in here twice to match any repeats that occur at least 3 times
