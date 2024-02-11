@@ -1,4 +1,4 @@
-#This contains Assignment 3 by Adriana Medina. Reg ex. These are some notes I took to help decipher.
+#This contains Assignment 3 by Adriana Medina. Reg ex. These are some notes I took to help decipher:
 
 ^: Asserts the start of the string.
 (.): Captures any single character.
